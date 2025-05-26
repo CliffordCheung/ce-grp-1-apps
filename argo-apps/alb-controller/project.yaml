@@ -8,7 +8,7 @@ metadata:
   name: aws-load-balancer-controller
   namespace: argocd
 spec:
-  project: default
+  project: ingress-aalimsee
   source:
     repoURL: https://aws.github.io/eks-charts
     chart: aws-load-balancer-controller
