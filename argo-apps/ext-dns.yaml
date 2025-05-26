@@ -1,0 +1,37 @@
+---
+# Argo CD Application for ExternalDNS
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    chart: external-dns
+    targetRevision: 1.14.4
+    helm:
+      values: |
+        serviceAccount:
+          name: external-dns
+          annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::255945442255:role/ce-grp-1-eks-external-dns-role
+
+        provider: aws
+        policy: upsert-only
+        registry: txt
+        txtOwnerId: ce-eks
+        domainFilters: ["sctp-sandbox.com"]
+        aws:
+          region: us-east-1
+        logLevel: info
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
