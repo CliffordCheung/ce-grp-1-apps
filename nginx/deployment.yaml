@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: nginx-prod-webapp-aalimsee
   namespace: prod
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
         app: nginx
     spec:
       containers:
-      - name: nginx
+      - name: nginx-prod-webapp-aalimsee
         image: nginx
         ports:
         - containerPort: 80
