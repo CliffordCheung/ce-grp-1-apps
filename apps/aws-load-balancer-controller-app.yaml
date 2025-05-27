@@ -15,10 +15,14 @@ spec:
   source:
     repoURL: https://aws.github.io/eks-charts
     targetRevision: 1.13.2
-    chart: aws-load-balancer-controller
     helm:
-      valueFiles:
-        - values.yaml
+      values: |
+        clusterName: ce-grp-1-eks
+        region: us-east-1
+        vpcId: vpc-0ce13075f23d1c50d
+        serviceAccount:
+          create: false
+          name: aws-load-balancer-controller
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
