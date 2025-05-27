@@ -7,3 +7,6 @@ vpcId: vpc-0ce13075f23d1c50d
 serviceAccount:
   create: false
   name: aws-load-balancer-controller
+
+# Argo CD cannot use valueFiles: when the repoURL is a Helm repo like https://aws.github.io/eks-charts.
+# So your aws-load-balancer-controller-app.yaml must include inline Helm values like this:
