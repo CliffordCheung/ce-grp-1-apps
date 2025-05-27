@@ -1,22 +1,21 @@
 ---
 # This is the root Application Argo CD watches. It syncs all child apps under argo-apps/
+# This points to the apps/ folder in your repo, which contains the other Application definitions (like nginx-app.yaml and aws-load-balancer-controller-app.yaml).
 
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: apps
-  namespace: prod
+  name: app-of-apps
+  namespace: argocd
 spec:
-  project: prod-test-ALB-controller
+  project: default
   source:
     repoURL: https://github.com/aalimsee/ce-grp-1-apps.git
     targetRevision: HEAD
-    path: argo-apps
-    directory:
-      recurse: true
+    path: apps
   destination:
     server: https://kubernetes.default.svc
-    namespace: prod
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
