@@ -4,14 +4,6 @@ clusterName: ce-grp-1-eks
 region: us-east-1
 vpcId: vpc-0ce13075f23d1c50d
 
-# For public subnets (used for LoadBalancer, ALB)
-Key: kubernetes.io/role/elb
-Value: 1
-
-# For private subnets (used for internal ALB)
-# Key: kubernetes.io/role/internal-elb
-# Value: 1
-
 serviceAccount:
   create: false
   name: aws-load-balancer-controller
