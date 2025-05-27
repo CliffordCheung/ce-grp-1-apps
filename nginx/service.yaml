@@ -5,6 +5,10 @@ metadata:
   name: nginx-prod-webapp-aalimsee
   namespace: prod
 
+annotations:
+  # Remove or comment this line to make it external
+  # service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+
   labels:
     app.kubernetes.io/name: nginx
     app.kubernetes.io/instance: nginx-prod-webapp-aalimsee
