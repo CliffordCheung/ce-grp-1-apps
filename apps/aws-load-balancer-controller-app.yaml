@@ -1,0 +1,31 @@
+---
+# This tells Argo CD:
+# Install the Helm chart under aws-load-balancer-controller/
+# Use the values.yaml
+# Deploy into the kube-system namespace
+# Do not create the namespace
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/aalimsee/ce-grp-1-apps.git
+    targetRevision: HEAD
+    path: aws-load-balancer-controller
+    helm:
+      releaseName: aws-load-balancer-controller
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false

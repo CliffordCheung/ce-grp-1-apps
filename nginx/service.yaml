@@ -4,6 +4,14 @@ kind: Service
 metadata:
   name: nginx-prod-webapp-aalimsee
   namespace: prod
+
+  labels:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/instance: nginx-prod-webapp-aalimsee
+    app.kubernetes.io/part-of: ce-grp-1
+    app.kubernetes.io/managed-by: argocd
+    environment: prod
+
 spec:
   selector:
     app: nginx

@@ -1,0 +1,9 @@
+---
+# Ensure this matches the IRSA-linked aws-load-balancer-controller service account already created in kube-system.
+clusterName: ce-grp-1-eks
+region: us-east-1
+vpcId: vpc-0ce13075f23d1c50d
+
+serviceAccount:
+  create: false
+  name: aws-load-balancer-controller

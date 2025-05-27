@@ -3,9 +3,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: nginx-prod-webapp-aalimsee
-  namespace: prod
+  namespace: argocd
 spec:
-  project: nginx-aalimsee
+  project: default
   source:
     repoURL: https://github.com/aalimsee/ce-grp-1-apps.git
     targetRevision: HEAD
