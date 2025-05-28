@@ -20,3 +20,25 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
+# Create an Argo CD App to Manage RBAC
+# In your app-of-apps.yaml, add a child application pointing to the RBAC directory
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cluster-admins-rbac
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/aalimsee/ce-grp-1-apps.git
+    targetRevision: HEAD
+    path: rbac
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system  # Or any appropriate namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
