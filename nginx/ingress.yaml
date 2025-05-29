@@ -11,6 +11,8 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80, "HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-2-2021-06
+    external-dns.alpha.kubernetes.io/hostname: ce-grp-1.sctp-sandbox.com
 spec:
   rules:
   - host: ce-grp-1.sctp-sandbox.com
