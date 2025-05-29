@@ -2,4 +2,7 @@
 resources:
   - nginx-app.yaml
   - aws-load-balancer-controller-app.yaml
+  - prometheus-app.yaml
   - rbac-app.yaml
+  - group1-nginx-hc.yaml
+  - ebs-csi-driver-app.yaml
