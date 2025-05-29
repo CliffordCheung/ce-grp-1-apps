@@ -4,5 +4,5 @@ resources:
   - aws-load-balancer-controller-app.yaml
   - prometheus-app.yaml
   - rbac-app.yaml
-  - group1-nginx-hc.yaml
+  - test-grp-1-nginx-hc.yaml
   - ebs-csi-driver-app.yaml
