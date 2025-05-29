@@ -1,0 +1,5 @@
+---
+resources:
+  - nginx-app.yaml
+  - aws-load-balancer-controller-app.yaml
+  - rbac-app.yaml
