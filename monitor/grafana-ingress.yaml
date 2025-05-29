@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: prod
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80, "HTTPS": 443}]'
+    alb.ingress.kubernetes.io/group.name: ce-grp-1
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-2-2021-06
+    external-dns.alpha.kubernetes.io/hostname: grafana.ce-grp-1.sctp-sandbox.com
+spec:
+  rules:
+  - host: grafana.ce-grp-1.sctp-sandbox.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana-prod-aalimsee
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - grafana.ce-grp-1.sctp-sandbox.com
+    secretName: grafana-tls  # This name is symbolic; ACM manages the cert
