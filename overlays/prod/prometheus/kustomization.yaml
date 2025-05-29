@@ -1,0 +1,6 @@
+---
+
+# overlays/prod/prometheus/kustomization.yaml
+resources:
+  - prometheus-ingress.yaml
+  - prometheus-service.yaml
