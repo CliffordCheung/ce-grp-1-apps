@@ -1,0 +1,14 @@
+# Expose Prometheus via Kubernetes Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  selector:
+    app.kubernetes.io/name: prometheus
+  ports:
+    - port: 80
+      targetPort: 9090
+  type: ClusterIP
