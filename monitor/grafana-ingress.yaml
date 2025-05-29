@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress
+  name: grafana
   namespace: prod
   annotations:
     kubernetes.io/ingress.class: alb
@@ -13,20 +13,20 @@ metadata:
     alb.ingress.kubernetes.io/group.name: ce-grp-1
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-2-2021-06
-    external-dns.alpha.kubernetes.io/hostname: ce-grp-1.sctp-sandbox.com
+    external-dns.alpha.kubernetes.io/hostname: grafana.ce-grp-1.sctp-sandbox.com
 spec:
   rules:
-  - host: ce-grp-1.sctp-sandbox.com
+  - host: grafana.ce-grp-1.sctp-sandbox.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: nginx-prod-webapp-aalimsee
+            name: grafana-prod-aalimsee
             port:
               number: 80
   tls:
   - hosts:
-    - ce-grp-1.sctp-sandbox.com
-    secretName: nginx-tls  # This name is symbolic; ACM manages the cert
+    - grafana.ce-grp-1.sctp-sandbox.com
+    secretName: grafana-tls  # This name is symbolic; ACM manages the cert
