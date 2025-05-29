@@ -1,0 +1,26 @@
+# Install AWS EBS CSI Driver (via Argo CD)
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ebs-csi-driver
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+    chart: aws-ebs-csi-driver
+    targetRevision: 2.31.0  # Or latest
+    helm:
+      parameters:
+        - name: controller.serviceAccount.create
+          value: "true"
+        - name: enableVolumeScheduling
+          value: "true"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
