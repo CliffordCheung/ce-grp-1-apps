@@ -27,4 +27,4 @@ spec:
   tls:
   - hosts:
     - ce-grp-1.sctp-sandbox.com
-    secretName: nginx-tls  # This name is symbolic; ACM manages the cert
+    secretName: dummy-nginx-tls  # This name is symbolic; ACM manages the cert
