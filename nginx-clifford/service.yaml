@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-test-webapp-clifford
+  namespace: prod
+
+  labels:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/instance: nginx-test-webapp-clifford
+    app.kubernetes.io/part-of: ce-grp-1
+    app.kubernetes.io/managed-by: argocd
+    environment: test
+
+annotations:
+# Remove or comment this line to make it external
+# service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
