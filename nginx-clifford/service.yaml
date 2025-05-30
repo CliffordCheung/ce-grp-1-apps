@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx-test-webapp-clifford
-  namespace: prod
+  namespace: test
 
   labels:
     app.kubernetes.io/name: nginx
