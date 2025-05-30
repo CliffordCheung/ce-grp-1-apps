@@ -24,7 +24,7 @@ spec:
             name: nginx-prod-webapp-aalimsee
             port:
               number: 80
-  tls:
-  - hosts:
-    - ce-grp-1.sctp-sandbox.com
-    secretName: nginx-tls  # This name is symbolic; ACM manages the cert
+#  tls:
+#  - hosts:
+#    - ce-grp-1.sctp-sandbox.com
+#    secretName: nginx-tls  # This name is symbolic; ACM manages the cert

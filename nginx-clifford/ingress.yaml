@@ -2,8 +2,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-ingress-clifford
-  namespace: prod
+  name: nginx-ingress
+  namespace: test
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -21,10 +21,10 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx-test-webapp-clifford
+            name: nginx-prod-webapp-aalimsee
             port:
               number: 80
-  tls:
-  - hosts:
-    - ce-grp-1.sctp-sandbox.com
-    secretName: dummy-nginx-tls  # This name is symbolic; ACM manages the cert
+#  tls:
+#  - hosts:
+#    - ce-grp-1.sctp-sandbox.com
+#    secretName: nginx-tls  # This name is symbolic; ACM manages the cert
