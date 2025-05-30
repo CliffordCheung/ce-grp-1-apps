@@ -13,6 +13,7 @@ metadata:
     alb.ingress.kubernetes.io/group.name: ce-grp-1
     alb.ingress.kubernetes.io/ssl-redirect: '443'
 spec:
+  ingressClassName: alb  # ✅ This makes CLASS show up!
   rules:
   - host: ce-grp-1.sctp-sandbox.com
     http:
