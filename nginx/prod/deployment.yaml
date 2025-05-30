@@ -2,36 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-prod-webapp-aalimsee
-  namespace: prod
-
-  labels:
-    app.kubernetes.io/name: nginx
-    app.kubernetes.io/instance: nginx-prod-webapp-aalimsee
-    app.kubernetes.io/part-of: ce-grp-1
-    app.kubernetes.io/managed-by: argocd
-    environment: prod
-
+  name: nginx-app   # `metadata.name` is consistent and unique
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: nginx-app   # `spec.selector.matchLabels` matches `template.metadata.labels`
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: nginx
-        app.kubernetes.io/instance: nginx-prod-webapp-aalimsee
-        app.kubernetes.io/part-of: ce-grp-1
-        app.kubernetes.io/managed-by: argocd
-        environment: prod
-        app: nginx  # Important for service selector
+        app: nginx-app  # Important for service selector
     spec:
       containers:
       - name: nginx
-        image: nginx:latest
+        image: nginx:latest   # Correct Docker image used
         ports:
-        - containerPort: 80
+        - containerPort: 80   # `containerPort` matches `targetPort` in the Service
 
         resources:
           requests:

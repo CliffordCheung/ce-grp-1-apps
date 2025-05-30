@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service   # `metadata.name` matches `backend.service.name` in the Ingress
+spec:
+  selector:
+    app: nginx-app   # `spec.selector` matcheslabels in the Deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80   # `port` and `targetPort` align with container settings
