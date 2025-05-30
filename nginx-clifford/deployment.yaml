@@ -20,7 +20,12 @@ spec:
   template:
     metadata:
       labels:
-        app: nginx
+        app.kubernetes.io/name: nginx
+        app.kubernetes.io/instance: nginx-test-webapp-clifford
+        app.kubernetes.io/part-of: ce-grp-1
+        app.kubernetes.io/managed-by: argocd
+        environment: test
+        app: nginx  # Important for service selector
     spec:
       containers:
       - name: nginx
