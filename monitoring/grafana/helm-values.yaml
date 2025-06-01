@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: grafana
+    targetRevision: 6.59.4
+    helm:
+      values: |
+        persistence:
+          enabled: true
+          storageClassName: gp2
+          accessModes:
+            - ReadWriteOnce
+          size: 2Gi
+
+        env:
+          GF_SERVER_ROOT_URL: "https://grafana.ce-grp-1.sctp-sandbox.com/"
+
+        plugins:
+          - grafana-piechart-panel
+
+        # Ingress config inside Helm values in Argo CD Application YAML
+        ingress:
+          enabled: true
+          ingressClassName: alb
+          annotations:
+            alb.ingress.kubernetes.io/scheme: internet-facing
+            alb.ingress.kubernetes.io/target-type: ip
+            alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+            alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
+            alb.ingress.kubernetes.io/ssl-redirect: '443'
+            external-dns.alpha.kubernetes.io/hostname: grafana.ce-grp-1.sctp-sandbox.com
+          hosts:
+            - grafana.ce-grp-1.sctp-sandbox.com
+          path: /
+          pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+  tls:
+    - hosts:
+        - grafana.ce-grp-1.sctp-sandbox.com
+
