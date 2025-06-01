@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app2
+  namespace: prod
   labels:
     app: app2
 spec:
@@ -13,29 +14,29 @@ spec:
     metadata:
       labels:
         app: app2
-    # spec:
-    #   containers:
-    #     - name: app2
-    #       image: nginx:latest
-    #       ports:
-    #         - containerPort: 80
-
     spec:
       containers:
-      - name: nginx
-        image: nginx:alpine
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "64Mi"
-          limits:
-            cpu: "250m"
-            memory: "128Mi"
-        volumeMounts:
-        - name: web-content
-          mountPath: /usr/share/nginx/html
-      volumes:
-      - name: web-content
-        configMap:
-          name: app2-html
+        - name: app2
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+
+    # spec:
+    #   containers:
+    #   - name: nginx
+    #     image: nginx:alpine
+    #     resources:
+    #       requests:
+    #         cpu: "100m"
+    #         memory: "64Mi"
+    #       limits:
+    #         cpu: "250m"
+    #         memory: "128Mi"
+    #     volumeMounts:
+    #     - name: web-content
+    #       mountPath: /usr/share/nginx/html
+    #   volumes:
+    #   - name: web-content
+    #     configMap:
+    #       name: app2-html
 
