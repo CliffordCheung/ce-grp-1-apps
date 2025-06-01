@@ -1,0 +1,5 @@
+# The kustomization.yaml file is the core of Kustomize, a Kubernetes configuration management tool. It's used to customize and manage Kubernetes resource configurations, particularly by leveraging overlays and patches without modifying the original YAML files. In essence, it defines how Kustomize should transform and combine different Kubernetes manifests.
+---
+resources:
+  - prometheus/helm-values.yaml
+  - grafana/helm-values.yaml

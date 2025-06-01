@@ -10,6 +10,7 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     external-dns.alpha.kubernetes.io/hostname: ce-grp-1.sctp-sandbox.com
+    # app.kubernetes.io/name: prometheus   #
 spec:
   ingressClassName: alb
   rules:
@@ -30,3 +31,10 @@ spec:
                 name: app2-service
                 port:
                   number: 80
+          # - path: /monitor
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: prometheus   #
+          #       port:
+          #         number: 80

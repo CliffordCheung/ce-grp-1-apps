@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 56.6.2
+    helm:
+      values: |
+        grafana:
+          enabled: false
+
+        prometheus:
+          prometheusSpec:
+            externalUrl: "https://prometheus.ce-grp-1.sctp-sandbox.com"
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: gp2
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 5Gi
+
+        # Ingress config inside Helm values in Argo CD Application YAML
+        ingress:
+          enabled: true
+          ingressClassName: alb
+          annotations:
+            alb.ingress.kubernetes.io/scheme: internet-facing
+            alb.ingress.kubernetes.io/target-type: ip
+            alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+            alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
+            alb.ingress.kubernetes.io/ssl-redirect: '443'
+            external-dns.alpha.kubernetes.io/hostname: prometheus.ce-grp-1.sctp-sandbox.com
+          hosts:
+            - prometheus.ce-grp-1.sctp-sandbox.com
+          paths:
+            - /
+          pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+  tls:
+    - hosts:
+        - prometheus.ce-grp-1.sctp-sandbox.com

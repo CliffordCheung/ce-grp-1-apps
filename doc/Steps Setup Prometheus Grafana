@@ -1,0 +1,140 @@
+✅ Step-by-Step: Prometheus & Grafana on EKS under /monitor
+📁 1. GitOps Folder Structure
+Place the following in your Git repository for Argo CD to sync:
+
+pgsql
+ce-grp-1-apps/
+└── monitoring/
+    ├── prometheus/
+    │   └── helm-values.yaml
+    ├── grafana/
+    │   └── helm-values.yaml
+    └── kustomization.yaml
+⚙️ 2. monitoring/kustomization.yaml
+yaml
+resources:
+  - prometheus/helm-values.yaml
+  - grafana/helm-values.yaml
+📦 3. monitoring/prometheus/helm-values.yaml
+We’ll use prometheus-community/kube-prometheus-stack Helm chart.
+
+yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 56.6.2
+    helm:
+      values: |
+        grafana:
+          enabled: false
+
+        prometheus:
+          prometheusSpec:
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: gp2
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 5Gi
+
+        ingress:
+          enabled: true
+          ingressClassName: alb
+          annotations:
+            alb.ingress.kubernetes.io/scheme: internet-facing
+            alb.ingress.kubernetes.io/target-type: ip
+            alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+            alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
+            alb.ingress.kubernetes.io/ssl-redirect: '443'
+            external-dns.alpha.kubernetes.io/hostname: ce-grp-1.sctp-sandbox.com
+          hosts:
+            - ce-grp-1.sctp-sandbox.com
+          paths:
+            - /monitor
+          pathType: Prefix
+          tls: []
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+📊 4. monitoring/grafana/helm-values.yaml
+This assumes you want Grafana as a separate deployment. If not, you can skip this since Prometheus stack includes Grafana.
+
+yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: grafana
+    targetRevision: 6.59.4
+    helm:
+      values: |
+        persistence:
+          enabled: true
+          storageClassName: gp2
+          accessModes:
+            - ReadWriteOnce
+          size: 2Gi
+
+        ingress:
+          enabled: true
+          ingressClassName: alb
+          annotations:
+            alb.ingress.kubernetes.io/scheme: internet-facing
+            alb.ingress.kubernetes.io/target-type: ip
+            alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+            alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
+            alb.ingress.kubernetes.io/ssl-redirect: '443'
+            external-dns.alpha.kubernetes.io/hostname: ce-grp-1.sctp-sandbox.com
+          hosts:
+            - ce-grp-1.sctp-sandbox.com
+          path: /monitor
+          pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+🚀 5. Update Your Shared Ingress (If needed)
+If both apps share a common ingress (like ce-grp-1-ingress in prod), and you're keeping Prometheus in monitoring, you can use separate Ingress resources, or consolidate them.
+
+Since ALB supports one Ingress per service group best, the recommended path is:
+
+Keep separate Ingress per namespace
+
+ALB will create separate listeners, still under the same domain and cert (Route 53 still points to ALB DNS)
+
+✅ 6. Apply via Argo CD
+If your Git repo is already synced to Argo CD, just run:
+
+bash
+argocd app sync prometheus
+argocd app sync grafana
+Or just let Argo CD auto-sync them based on the automated setting.
+
+📍 Bonus: Access Dashboard
+Visit: https://ce-grp-1.sctp-sandbox.com/monitor
+
+Grafana default user/pass: admin/prom-operator (can be overridden in values)
+
+You can edit dashboards or import JSON
+
