@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"app1-service","namespace":"prod"},"spec":{"ports":[{"port":80,"targetPort":80}],"selector":{"app":"app1"},"type":"ClusterIP"}}
+  creationTimestamp: "2025-05-30T19:04:25Z"
+  name: app1-service
+  namespace: prod
+  resourceVersion: "1848814"
+  uid: fb7872bf-eeb2-4004-a63b-10d4bb600eee
+spec:
+  clusterIP: 10.100.42.125
+  clusterIPs:
+  - 10.100.42.125
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: app1
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

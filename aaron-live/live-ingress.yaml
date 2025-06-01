@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/rewrite-target: /$2
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/target-type: ip
+    external-dns.alpha.kubernetes.io/hostname: ce-grp-1.sctp-sandbox.com
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"alb.ingress.kubernetes.io/actions.ssl-redirect":"{\"Type\": \"redirect\", \"RedirectConfig\": { \"Protocol\": \"HTTPS\", \"Port\": \"443\", \"StatusCode\": \"HTTP_301\"}}","alb.ingress.kubernetes.io/certificate-arn":"arn:aws:acm:us-east-1:255945442255:certificate/ab4d119c-d073-4d08-90c3-abb44ac88bc1","alb.ingress.kubernetes.io/listen-ports":"[{\"HTTP\": 80}, {\"HTTPS\": 443}]","alb.ingress.kubernetes.io/rewrite-target":"/$2","alb.ingress.kubernetes.io/scheme":"internet-facing","alb.ingress.kubernetes.io/ssl-redirect":"443","alb.ingress.kubernetes.io/target-type":"ip","external-dns.alpha.kubernetes.io/hostname":"ce-grp-1.sctp-sandbox.com"},"name":"ce-grp-1-ingress","namespace":"prod"},"spec":{"ingressClassName":"alb","rules":[{"host":"ce-grp-1.sctp-sandbox.com","http":{"paths":[{"backend":{"service":{"name":"app1-service","port":{"number":80}}},"path":"/","pathType":"Prefix"},{"backend":{"service":{"name":"app2-service","port":{"number":80}}},"path":"/app2(/|$)(.*)","pathType":"Prefix"}]}}]}}
+  creationTimestamp: "2025-05-30T19:05:00Z"
+  finalizers:
+  - ingress.k8s.aws/resources
+  generation: 2
+  name: ce-grp-1-ingress
+  namespace: prod
+  resourceVersion: "1855913"
+  uid: f1090cc7-acb2-4028-8c15-71cb07524d5c
+spec:
+  ingressClassName: alb
+  rules:
+  - host: ce-grp-1.sctp-sandbox.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: app1-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+      - backend:
+          service:
+            name: app2-service
+            port:
+              number: 80
+        path: /app2(/|$)(.*)
+        pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+    - hostname: k8s-prod-cegrp1in-67b93fd9b4-579433357.us-east-1.elb.amazonaws.com
